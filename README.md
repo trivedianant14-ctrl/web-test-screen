@@ -5,7 +5,7 @@ Working browser prototype of a CBT exam experience for NPrep.
 ## Run locally
 
 ```powershell
-node server.js
+node local-server.js
 ```
 
 Open:
@@ -24,3 +24,7 @@ The launch button requests fullscreen and opens the CBT flow. Browsers require f
 - Countdown timer
 - Question palette statuses
 - Save, mark for review, clear response, pause, submit, instructions, and question paper interactions
+
+## Deploying on Vercel
+
+This is a static site. Vercel should serve `index.html` directly from the repository root. The local Node server is named `local-server.js` so Vercel does not confuse it with a production serverless entry point.
