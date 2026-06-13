@@ -3,199 +3,393 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NPrep NORCET CBT Prototype</title>
+    <title>AIIMS NORCET — CBT Interface</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main id="app" class="app">
-      <header id="topbar" class="topbar">
-        <div class="brand">
-          <span class="brand-name">NPrep</span>
-          <span class="test-title">AIIMS NORCET — Nursing Officer Recruitment Common Eligibility Test (Stage I)</span>
+
+    <!-- ── SCREEN 1: LANDING ── -->
+    <section id="landingScreen" class="screen landing-screen">
+      <header class="landing-header">
+        <div class="landing-logo-row">
+          <div class="aiims-crest">
+            <span class="crest-text">AIIMS</span>
+          </div>
+          <div class="aiims-titles">
+            <div class="aiims-full-name">All India Institute of Medical Sciences, New Delhi</div>
+            <div class="aiims-portal-name">Assessment &amp; Examination Registration Portal</div>
+          </div>
+        </div>
+        <div class="landing-exam-badge">
+          Nursing Officer Recruitment Common Eligibility Test — NORCET 10 (Stage I)
         </div>
       </header>
 
-      <section id="generalScreen" class="screen general-screen">
-        <div class="content-pane scroll-pane">
-          <h2>General Instructions:</h2>
-          <ol class="instruction-list">
-            <li>The clock will be set at the server. The countdown timer at the top right corner of screen will display the remaining time available for you to complete the examination. When the timer reaches zero, the examination will end by itself.</li>
-            <li>The Question Palette displayed on the right side of screen will show the status of each question using one of the following symbols:</li>
-          </ol>
-          <div class="legend-block">
-            <p><span class="legend-symbol not-visited"></span>You have not visited the question yet.</p>
-            <p><span class="legend-symbol not-answered"></span>You have not answered the question.</p>
-            <p><span class="legend-symbol answered"></span>You have answered the question.</p>
-            <p><span class="legend-symbol marked"></span>You have NOT answered the question, but have marked the question for review.</p>
-            <p><span class="legend-symbol marked-answered"></span>You have answered the question, but marked it for review.</p>
+      <div class="landing-body">
+        <div class="landing-card">
+          <div class="landing-card-header">Candidate Details</div>
+          <div class="landing-card-body">
+            <table class="candidate-info-table">
+              <tr>
+                <td class="info-label">Candidate Name</td>
+                <td class="info-sep">:</td>
+                <td class="info-value"><strong>Anant Trivedi</strong></td>
+              </tr>
+              <tr>
+                <td class="info-label">Roll Number</td>
+                <td class="info-sep">:</td>
+                <td class="info-value"><strong>10024156</strong></td>
+              </tr>
+              <tr>
+                <td class="info-label">Exam Date</td>
+                <td class="info-sep">:</td>
+                <td class="info-value"><strong>13 June 2026</strong></td>
+              </tr>
+              <tr>
+                <td class="info-label">Test Name</td>
+                <td class="info-sep">:</td>
+                <td class="info-value"><strong>NORCET-10 Stage I</strong></td>
+              </tr>
+              <tr>
+                <td class="info-label">Duration</td>
+                <td class="info-sep">:</td>
+                <td class="info-value"><strong>90 Minutes</strong></td>
+              </tr>
+              <tr>
+                <td class="info-label">Subject</td>
+                <td class="info-sep">:</td>
+                <td class="info-value"><strong>Nursing Officer</strong></td>
+              </tr>
+              <tr>
+                <td class="info-label">Test Centre</td>
+                <td class="info-sep">:</td>
+                <td class="info-value"><strong>AIIMS New Delhi — Examination Hall 1</strong></td>
+              </tr>
+            </table>
           </div>
-          <p>The <strong>Mark For Review</strong> status for a question simply indicates that you would like to look at that question again. If a question is answered, but marked for review, then the answer will be considered for evaluation unless the status is modified by the candidate.</p>
-          <h3>Navigating to a Question :</h3>
-          <ol class="instruction-list" start="3">
-            <li>To answer a question, do the following:
-              <ol>
-                <li>Click on the question number in the Question Palette at the right of your screen to go to that numbered question directly. Note that using this option does NOT save your answer to the current question.</li>
-                <li>Click on <strong>Save &amp; Next</strong> to save your answer for the current question and then go to the next question.</li>
-                <li>Click on <strong>Mark for Review &amp; Next</strong> to save your answer for the current question and also mark it for review, and then go to the next question.</li>
-              </ol>
-            </li>
-          </ol>
-          <p>Note that your answer for the current question will not be saved, if you navigate to another question directly by clicking on a question number without saving the answer to the previous question.</p>
-          <p>You can view all the questions by clicking on the <strong>Question Paper</strong> button. <span class="red">This feature is provided, so that if you want you can just see the entire question paper at a glance.</span></p>
-          <h3>Answering a Question :</h3>
-          <ol class="instruction-list" start="4">
-            <li>Procedure for answering a multiple choice (MCQ) type question:
-              <ol>
-                <li>Choose one answer from the 4 options (A,B,C,D) given below the question, click on the bubble placed before the chosen option.</li>
-                <li>To deselect your chosen answer, click on the bubble of the chosen option again or click on the <strong>Clear Response</strong> button.</li>
-                <li>To change your chosen answer, click on the bubble of another option.</li>
-                <li>To save your answer, you MUST click on the <strong>Save &amp; Next</strong></li>
-              </ol>
-            </li>
-            <li>Procedure for answering a numerical answer type question:
-              <ol>
-                <li>To enter a number as your answer, use the virtual numerical keypad.</li>
-                <li>A fraction can be entered as an answer with or without "0" before the decimal point. <span class="red">As many as four decimal points, e.g. 12.5435 or 0.003 or -932.6711 or 12.82 can be entered.</span></li>
-                <li>To clear your answer, click on the <strong>Clear Response</strong> button</li>
-                <li>To save your answer, you MUST click on the <strong>Save &amp; Next</strong></li>
-              </ol>
-            </li>
-            <li>To mark a question for review, click on the <strong>Mark for Review &amp; Next</strong> button. If an answer is selected for a question that is <strong>Marked for Review</strong>, that answer will be considered in the evaluation unless the status is modified by the candidate.</li>
-            <li>To change your answer to a question that has already been answered, first select that question for answering and then follow the procedure for answering that type of question.</li>
-            <li>Note that ONLY Questions for which answers are saved or marked for review after answering will be considered for evaluation.</li>
-            <li>Sections in this question paper are displayed on the top bar of the screen. Questions in a Section can be viewed by clicking on the name of that Section.</li>
-            <li>After clicking the <strong>Save &amp; Next</strong> button for the last question in a Section, you will automatically be taken to the first question of the next Section in sequence.</li>
-            <li>You can move the mouse cursor over the name of a Section to view the answering status for that Section.</li>
-          </ol>
         </div>
-        <aside class="profile-panel">
-          <div class="avatar">A</div>
-          <div class="candidate-name">Anant</div>
-        </aside>
-        <footer class="bottom-bar">
-          <button class="link-btn">&larr; Go to Tests</button>
-          <button id="generalNext" class="primary-light">Next</button>
-        </footer>
-      </section>
 
-      <section id="testInfoScreen" class="screen info-screen hidden">
-        <div class="content-pane info-content">
-          <h1>AIIMS NORCET — Nursing Officer Recruitment Common Eligibility Test (Stage I)</h1>
-          <div class="meta-row">
-            <strong>Duration: 8 Mins</strong>
-            <strong>Maximum Marks: 10</strong>
-          </div>
-          <h3>Read the following instructions carefully.</h3>
-          <ol class="test-rules">
-            <li>The Test contain 1 sections having 10 questions.</li>
-            <li>Each question has 4 options out of which only one is correct.</li>
-            <li>You have to finish the test in 8 minutes.</li>
-            <li>You will be awarded 1 marks for each correct answer and there will be 0.25 negative marking</li>
-            <li>There is no penalty for the questions that you have not attempted.</li>
-            <li>Once you start the test, you will not be allowed to reattempt it. Make sure that you complete the test before you submit the test and/or close the browser.</li>
-          </ol>
+        <div class="landing-actions">
+          <p class="landing-note">Please verify your details above before proceeding.</p>
+          <button id="startTestBtn" class="start-test-btn">
+            Click Here to Proceed &rarr;
+          </button>
         </div>
-        <aside class="profile-panel">
-          <div class="avatar">A</div>
-          <div class="candidate-name">Anant</div>
+      </div>
+
+      <footer class="landing-footer">
+        &copy; AIIMS New Delhi &nbsp;|&nbsp; All rights reserved
+      </footer>
+    </section>
+
+    <!-- ── SCREEN 2: GENERAL INSTRUCTIONS ── -->
+    <section id="instructionsScreen" class="screen instr-screen hidden">
+      <div class="instr-layout">
+
+        <!-- Scrollable instructions content -->
+        <div class="instr-content-area">
+          <h2 class="instr-title">General Instructions:</h2>
+
+          <ol class="instruction-list">
+            <li>
+              The clock will be set at the server. The countdown timer at the top right corner of
+              the screen will display the remaining time available for you to complete the
+              examination. When the timer reaches zero, the examination will end by itself.
+              You will not be required to end or submit your examination.
+            </li>
+            <li>
+              The Question Palette displayed on the right side of screen will show the status
+              of each question using one of the following symbols:
+            </li>
+          </ol>
+
+          <div class="legend-block">
+            <p><span class="legend-sym not-visited"></span>You have not visited the question yet.</p>
+            <p><span class="legend-sym not-answered"></span>You have not answered the question.</p>
+            <p><span class="legend-sym answered"></span>You have answered the question.</p>
+            <p><span class="legend-sym marked"></span>You have NOT answered the question, but have marked it for review.</p>
+            <p><span class="legend-sym marked-answered"></span>You have answered the question, but marked it for review.</p>
+          </div>
+
+          <p>
+            The <strong>Mark For Review</strong> status for a question simply indicates that you
+            would like to look at that question again. If a question is answered and Marked for
+            Review, the answer will be considered for evaluation unless the status is modified
+            by the candidate.
+          </p>
+
+          <h3 class="instr-sub">Navigating to a Question:</h3>
+          <ol class="instruction-list" start="3">
+            <li>
+              To answer a question, do the following:
+              <ol type="a">
+                <li>
+                  Click on the question number in the Question Palette at the right of your screen
+                  to go to that numbered question directly. Note that using this option does
+                  <strong>NOT</strong> save your answer to the current question.
+                </li>
+                <li>
+                  Click on <strong>Save &amp; Next</strong> to save your answer for the current
+                  question and then go to the next question.
+                </li>
+                <li>
+                  Click on <strong>Mark for Review &amp; Next</strong> to save your answer for
+                  the current question, mark it for review, and then go to the next question.
+                </li>
+              </ol>
+            </li>
+          </ol>
+          <p>
+            Note that your answer for the current question will <strong>not</strong> be saved
+            if you navigate to another question directly by clicking on its number without saving.
+          </p>
+
+          <h3 class="instr-sub">Answering a Question:</h3>
+          <ol class="instruction-list" start="4">
+            <li>
+              Procedure for answering a multiple choice (MCQ) type question:
+              <ol type="a">
+                <li>
+                  Choose one answer from the 4 options (A, B, C, D) given below the question
+                  by clicking on the bubble placed before the chosen option.
+                </li>
+                <li>
+                  To deselect your chosen answer, click on the bubble of the chosen option
+                  again or click on the <strong>Clear Response</strong> button.
+                </li>
+                <li>To change your chosen answer, click on the bubble of another option.</li>
+                <li>
+                  To save your answer, you MUST click on the <strong>Save &amp; Next</strong> button.
+                </li>
+              </ol>
+            </li>
+            <li>
+              To mark a question for review, click on the <strong>Mark for Review &amp; Next</strong>
+              button. If an answer is selected for a question that is Marked for Review, that answer
+              will be considered in the evaluation unless the status is modified by the candidate.
+            </li>
+            <li>
+              To change your answer to a question that has already been answered, first select that
+              question for answering and then follow the procedure for answering that type of question.
+            </li>
+            <li>
+              Note that ONLY Questions for which answers are Saved or Marked for Review after
+              answering will be considered for evaluation.
+            </li>
+            <li>
+              Sections in this question paper are displayed on the top bar of the screen.
+              Questions in a Section can be viewed by clicking on the name of that Section.
+            </li>
+            <li>
+              After clicking the <strong>Save &amp; Next</strong> button for the last question
+              in a Section, you will automatically be taken to the first question of the next
+              Section in sequence.
+            </li>
+            <li>
+              You can shuffle between sections and questions at any point during the examination
+              as per your convenience.
+            </li>
+          </ol>
+
+          <h3 class="instr-sub">Submitting the Test:</h3>
+          <ol class="instruction-list" start="11">
+            <li>
+              At any point of time you can view a summary of questions attempted / not-attempted
+              by clicking the <strong>Submit</strong> button on the right panel.
+            </li>
+            <li>
+              Once you click <strong>Yes</strong> in the confirmation dialog, the test will be
+              submitted. The test will be submitted automatically when the time expires.
+            </li>
+          </ol>
+
+          <p class="red-note">
+            <strong>Important:</strong> Please ensure a stable internet connection throughout the
+            examination. Any disruption may result in loss of work done in the current session.
+          </p>
+        </div>
+
+        <!-- Right panel: candidate profile -->
+        <aside class="instr-profile-panel">
+          <div class="instr-avatar">A</div>
+          <div class="instr-cand-name">Anant Trivedi</div>
+          <div class="instr-cand-roll">Roll No: 10024156</div>
         </aside>
-        <div class="declaration-bar">
-          <label class="language-line">Choose your default language:
-            <select id="languageSelect">
-              <option value="">-- Select --</option>
+      </div>
+
+      <!-- Fixed bottom bar -->
+      <div class="instr-footer">
+        <div class="instr-footer-info">
+          <span class="footer-exam-name">
+            <strong>AIIMS NORCET — Nursing Officer Recruitment Common Eligibility Test (Stage I)</strong>
+          </span>
+          <span class="footer-meta">
+            <span>Total Questions: <strong>20</strong></span>
+            <span>Duration: <strong>90 Min</strong></span>
+            <span>Max Marks: <strong>20</strong></span>
+            <span>+ve Marks: <strong>1</strong></span>
+            <span>–ve Marks: <strong>0.33</strong></span>
+          </span>
+        </div>
+
+        <div class="instr-footer-controls">
+          <div class="lang-row">
+            <label class="lang-label">
+              Choose your default language:&nbsp;
+              <select id="languageSelect">
+                <option value="">— Select —</option>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+              </select>
+            </label>
+            <span class="lang-note red-note">
+              Please note all questions will appear in your default language.
+              This language can be changed for a particular question later on.
+            </span>
+          </div>
+          <div class="declaration-row">
+            <label class="check-label">
+              <input id="agreeCheck" type="checkbox" />
+              I have read all the instructions carefully and I agree to abide by the terms.
+            </label>
+          </div>
+        </div>
+
+        <div class="instr-footer-actions">
+          <button id="backToLanding" class="btn-secondary">&#8592; Previous</button>
+          <button id="beginBtn" class="btn-begin" disabled>I am ready to begin</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SCREEN 3: EXAM ── -->
+    <section id="examScreen" class="screen exam-screen hidden">
+      <div class="norcet-shell">
+
+        <!-- Title bar -->
+        <div class="norcet-titlebar">
+          <strong>AIIMS NORCET — Nursing Officer Recruitment Common Eligibility Test (Stage I)</strong>
+          <label class="lang-switch">
+            View In:&nbsp;
+            <select id="questionLang">
               <option value="English">English</option>
               <option value="Hindi">Hindi</option>
             </select>
           </label>
-          <p class="red">Please note all questions will appear in your default language. This language can be changed for a particular question later on</p>
-          <hr />
-          <strong>Declaration:</strong>
-          <label class="check-line"><input id="agreeCheck" type="checkbox" /> I have understood and agree to all the instructions.</label>
         </div>
-        <footer class="bottom-bar">
-          <button id="backToGeneral" class="primary-light">Previous</button>
-          <button id="beginBtn" class="cyan-btn" disabled>I am ready to begin</button>
+
+        <!-- Candidate strip -->
+        <div class="candidate-strip">
+          <div class="photo-box">Photo</div>
+          <div class="candidate-data">
+            <div><strong>Candidate Name:</strong> Anant Trivedi</div>
+            <div><strong>Roll No:</strong> 10024156 &nbsp;&nbsp; <strong>Subject:</strong> Nursing Officer</div>
+          </div>
+          <div class="exam-meta-right">
+            <div>
+              <strong>Total Time Remaining:</strong>
+              <span id="timerDisplay" class="timer-red">01:30:00</span>
+            </div>
+            <div><strong>Exam Date:</strong> 13-Jun-2026</div>
+          </div>
+        </div>
+
+        <!-- Section tabs -->
+        <nav class="norcet-sections" id="sectionTabs"></nav>
+
+        <!-- Body: question pane + palette -->
+        <div class="norcet-body">
+
+          <div class="norcet-question-pane">
+            <div class="norcet-question-head">
+              <span>Question No.&nbsp;<strong id="questionNo">1</strong></span>
+              <span>
+                Marks for correct answer:&nbsp;<span class="marks-pos">+1</span>&nbsp;
+                |&nbsp;Negative Marks:&nbsp;<span class="marks-neg">-0.33</span>
+              </span>
+            </div>
+            <div class="question-body">
+              <p id="questionText" class="question-text"></p>
+              <div id="optionList" class="option-list"></div>
+            </div>
+          </div>
+
+          <aside class="norcet-palette">
+            <div class="palette-heading">Question Palette</div>
+            <div class="status-summary">
+              <span><b id="answeredCount" class="pill answered">0</b> Answered</span>
+              <span><b id="notAnsweredCount" class="pill not-answered">0</b> Not Answered</span>
+              <span><b id="notVisitedCount" class="pill not-visited">20</b> Not Visited</span>
+              <span><b id="markedCount" class="pill marked">0</b> Marked for Review</span>
+              <span class="status-wide">
+                <b id="markedAnsweredCount" class="pill marked-answered">0</b>
+                Answered &amp; Marked for Review (will be evaluated)
+              </span>
+            </div>
+            <div id="paletteSectionTitle" class="palette-section-title"></div>
+            <div id="palette" class="palette-grid"></div>
+            <div class="palette-submit-wrap">
+              <button id="submitBtn" class="submit-btn">Submit</button>
+            </div>
+          </aside>
+        </div>
+
+        <!-- Footer actions -->
+        <footer class="exam-footer">
+          <div class="footer-left">
+            <button id="markNextBtn" class="exam-btn">Mark for Review &amp; Next</button>
+            <button id="clearBtn" class="exam-btn">Clear Response</button>
+          </div>
+          <div class="footer-right">
+            <button id="prevBtn" class="exam-btn">&#171; Previous</button>
+            <button id="saveNextBtn" class="exam-btn save-next">Save &amp; Next</button>
+          </div>
         </footer>
-      </section>
+      </div>
+    </section>
 
-      <section id="examScreen" class="screen exam-screen hidden">
-        <div class="norcet-shell">
-          <div class="norcet-titlebar">
-            <strong>AIIMS NORCET — Nursing Officer Recruitment Common Eligibility Test (Stage I)</strong>
-            <label>View in
-              <select id="questionLang">
-                <option>English</option>
-                <option>Hindi</option>
-              </select>
-            </label>
-          </div>
-          <div class="candidate-strip">
-            <div class="photo-box">Photo</div>
-            <div class="candidate-data">
-              <div><strong>Candidate Name:</strong> Anant Trivedi</div>
-              <div><strong>Roll No:</strong> 10024156 <strong class="subject-label">Subject:</strong> Nursing Officer</div>
-            </div>
-            <div class="exam-meta">
-              <div><strong>Total Time Remaining:</strong> <span id="timerBox">01:30:00</span></div>
-              <div><strong>Exam Date:</strong> 13-Jun-2026</div>
-            </div>
-          </div>
-          <nav class="norcet-sections">
-            <button class="norcet-section active"><strong>Section A — Nursing Foundations</strong><span id="sectionTimeA">00:17:37</span></button>
-            <button class="norcet-section">Section B — Medical Surgical Nursing<span>00:18:00</span></button>
-            <button class="norcet-section">Section C — Child Health Nursing<span>00:18:00</span></button>
-            <button class="norcet-section">Section D — Community Health / Mental Health<span>00:18:00</span></button>
-            <button class="norcet-section">Section E — GK &amp; Aptitude<span>00:18:00</span></button>
-          </nav>
-          <div class="norcet-body">
-            <div class="norcet-question-pane">
-              <div class="norcet-question-head">
-                <strong>Question No. <span id="questionNo">1</span></strong>
-                <span>Marks: <span class="marks-positive">+1</span> / <span class="marks-negative">-0.33</span></span>
-              </div>
-              <div class="question-copy">
-                <p id="questionText"></p>
-                <div id="optionList" class="option-list"></div>
-              </div>
-            </div>
-            <aside id="sidePanel" class="norcet-palette">
-              <div class="palette-heading">Question Palette</div>
-              <div class="status-summary">
-                <span><b id="answeredCount" class="answered pill">0</b> Answered</span>
-                <span><b id="notAnsweredCount" class="not-answered pill">0</b> Not Answered</span>
-                <span><b id="notVisitedCount" class="not-visited pill">20</b> Not Visited</span>
-                <span><b id="markedCount" class="marked pill">0</b> Marked</span>
-                <span class="marked-wide"><b id="markedAnsweredCount" class="marked-answered pill">0</b> Answered &amp; Marked for Review (will be evaluated)</span>
-              </div>
-              <div class="palette-title"><strong>Section A — Nursing Foundations</strong></div>
-              <div id="palette" class="palette"></div>
-              <div class="panel-actions">
-                <button id="submitBtn" class="submit-exam">Submit Exam</button>
-              </div>
-            </aside>
-          </div>
-          <footer class="exam-footer">
-            <div>
-              <button id="markNextBtn" class="norcet-light-btn">Mark for Review &amp; Next</button>
-              <button id="clearBtn" class="norcet-light-btn">Clear Response</button>
-            </div>
-            <div>
-              <button id="prevBtn" class="norcet-light-btn">&laquo; Previous</button>
-              <button id="saveNextBtn" class="save-next">Save &amp; Next</button>
-            </div>
-          </footer>
+    <!-- ── SUBMIT SUMMARY MODAL ── -->
+    <div id="submitModal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+      <div class="modal-box summary-box">
+        <div class="modal-title-bar">Exam Summary — Confirm Submission</div>
+        <div class="modal-content">
+          <p class="modal-question">
+            You have chosen to <strong>End the Test</strong>. Are you sure you want to submit?
+          </p>
+          <table class="summary-table">
+            <thead>
+              <tr>
+                <th>Section</th>
+                <th>Total</th>
+                <th class="col-green">Answered</th>
+                <th class="col-red">Not Answered</th>
+                <th class="col-purple">Marked<br>(Not Ans.)</th>
+                <th class="col-purple">Ans. &amp;<br>Marked</th>
+                <th class="col-grey">Not<br>Visited</th>
+              </tr>
+            </thead>
+            <tbody id="summaryBody"></tbody>
+            <tfoot id="summaryFoot"></tfoot>
+          </table>
+          <p class="modal-warning red-note">
+            Once submitted, you will not be able to modify your answers.
+          </p>
         </div>
-      </section>
-    </main>
+        <div class="modal-footer-actions">
+          <button id="cancelSubmit" class="btn-secondary">No, Continue Test</button>
+          <button id="confirmSubmit" class="btn-submit-confirm">Yes, Submit Test</button>
+        </div>
+      </div>
+    </div>
 
-    <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
-      <div class="modal-card">
-        <h2 id="modalTitle"></h2>
-        <div id="modalBody"></div>
-        <div class="modal-actions">
-          <button id="modalCancel" class="primary-light">Cancel</button>
-          <button id="modalOk" class="cyan-btn">OK</button>
-        </div>
+    <!-- ── RESULT MODAL ── -->
+    <div id="resultModal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+      <div class="modal-box result-box">
+        <div class="result-check">&#10003;</div>
+        <h2 class="result-heading">Test Submitted Successfully</h2>
+        <p class="result-sub">Your AIIMS NORCET Stage I responses have been recorded.</p>
+        <p class="result-sub">You may now close this window.</p>
+        <button id="closeResult" class="btn-secondary" style="margin-top:24px;">Close</button>
       </div>
     </div>
 
