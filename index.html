@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NPrep CBT Test Prototype</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="launch" class="launch">
+      <button id="launchBtn" class="launch-button">Start NPrep CBT</button>
+    </div>
+
+    <main id="app" class="app hidden">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-name">NPrep</span>
+          <span class="test-title">RRB Staff Nurse Introduction: Sensory Organs</span>
+        </div>
+        <div id="examTimer" class="exam-timer hidden" aria-live="polite">
+          <strong>Time Left</strong>
+          <span id="timerBox">00 : 08 : 00</span>
+        </div>
+        <div id="examActions" class="exam-actions hidden">
+          <button id="fullscreenBtn" class="outline-btn">Switch Full Screen</button>
+          <button id="pauseBtn" class="outline-btn">Pause</button>
+        </div>
+      </header>
+
+      <section id="generalScreen" class="screen general-screen">
+        <div class="content-pane scroll-pane">
+          <button id="closeGeneral" class="close-button" aria-label="Close instructions">x</button>
+          <h2>General Instructions:</h2>
+          <ol class="instruction-list">
+            <li>The clock will be set at the server. The countdown timer at the top right corner of screen will display the remaining time available for you to complete the examination. When the timer reaches zero, the examination will end by itself.</li>
+            <li>The Question Palette displayed on the right side of screen will show the status of each question using one of the following symbols:</li>
+          </ol>
+          <div class="legend-block">
+            <p><span class="legend-symbol not-visited"></span>You have not visited the question yet.</p>
+            <p><span class="legend-symbol not-answered"></span>You have not answered the question.</p>
+            <p><span class="legend-symbol answered"></span>You have answered the question.</p>
+            <p><span class="legend-symbol marked"></span>You have NOT answered the question, but have marked the question for review.</p>
+            <p><span class="legend-symbol marked-answered"></span>You have answered the question, but marked it for review.</p>
+          </div>
+          <p>The <strong>Mark For Review</strong> status for a question simply indicates that you would like to look at that question again. If a question is answered, but marked for review, then the answer will be considered for evaluation unless the status is modified by the candidate.</p>
+          <h3>Navigating to a Question :</h3>
+          <ol class="instruction-list" start="3">
+            <li>To answer a question, do the following:
+              <ol>
+                <li>Click on the question number in the Question Palette at the right of your screen to go to that numbered question directly. Note that using this option does NOT save your answer to the current question.</li>
+                <li>Click on <strong>Save &amp; Next</strong> to save your answer for the current question and then go to the next question.</li>
+                <li>Click on <strong>Mark for Review &amp; Next</strong> to save your answer for the current question and also mark it for review, and then go to the next question.</li>
+              </ol>
+            </li>
+          </ol>
+          <p>Note that your answer for the current question will not be saved, if you navigate to another question directly by clicking on a question number without saving the answer to the previous question.</p>
+          <p>You can view all the questions by clicking on the <strong>Question Paper</strong> button. <span class="red">This feature is provided, so that if you want you can just see the entire question paper at a glance.</span></p>
+          <h3>Answering a Question :</h3>
+          <ol class="instruction-list" start="4">
+            <li>Procedure for answering a multiple choice (MCQ) type question:
+              <ol>
+                <li>Choose one answer from the 4 options (A,B,C,D) given below the question, click on the bubble placed before the chosen option.</li>
+                <li>To deselect your chosen answer, click on the bubble of the chosen option again or click on the <strong>Clear Response</strong> button.</li>
+                <li>To change your chosen answer, click on the bubble of another option.</li>
+                <li>To save your answer, you MUST click on the <strong>Save &amp; Next</strong></li>
+              </ol>
+            </li>
+            <li>Procedure for answering a numerical answer type question:
+              <ol>
+                <li>To enter a number as your answer, use the virtual numerical keypad.</li>
+                <li>A fraction can be entered as an answer with or without "0" before the decimal point. <span class="red">As many as four decimal points, e.g. 12.5435 or 0.003 or -932.6711 or 12.82 can be entered.</span></li>
+                <li>To clear your answer, click on the <strong>Clear Response</strong> button</li>
+                <li>To save your answer, you MUST click on the <strong>Save &amp; Next</strong></li>
+              </ol>
+            </li>
+            <li>To mark a question for review, click on the <strong>Mark for Review &amp; Next</strong> button. If an answer is selected for a question that is <strong>Marked for Review</strong>, that answer will be considered in the evaluation unless the status is modified by the candidate.</li>
+            <li>To change your answer to a question that has already been answered, first select that question for answering and then follow the procedure for answering that type of question.</li>
+            <li>Note that ONLY Questions for which answers are saved or marked for review after answering will be considered for evaluation.</li>
+            <li>Sections in this question paper are displayed on the top bar of the screen. Questions in a Section can be viewed by clicking on the name of that Section.</li>
+            <li>After clicking the <strong>Save &amp; Next</strong> button for the last question in a Section, you will automatically be taken to the first question of the next Section in sequence.</li>
+            <li>You can move the mouse cursor over the name of a Section to view the answering status for that Section.</li>
+          </ol>
+        </div>
+        <aside class="profile-panel">
+          <div class="avatar">A</div>
+          <div class="candidate-name">Anant</div>
+        </aside>
+        <footer class="bottom-bar">
+          <button class="link-btn">&larr; Go to Tests</button>
+          <button id="generalNext" class="primary-light">Next</button>
+        </footer>
+      </section>
+
+      <section id="testInfoScreen" class="screen info-screen hidden">
+        <div class="content-pane info-content">
+          <h1>RRB Staff Nurse Introduction: Sensory Organs</h1>
+          <div class="meta-row">
+            <strong>Duration: 8 Mins</strong>
+            <strong>Maximum Marks: 10</strong>
+          </div>
+          <h3>Read the following instructions carefully.</h3>
+          <ol class="test-rules">
+            <li>The Test contain 1 sections having 10 questions.</li>
+            <li>Each question has 4 options out of which only one is correct.</li>
+            <li>You have to finish the test in 8 minutes.</li>
+            <li>You will be awarded 1 marks for each correct answer and there will be 0.25 negative marking</li>
+            <li>There is no penalty for the questions that you have not attempted.</li>
+            <li>Once you start the test, you will not be allowed to reattempt it. Make sure that you complete the test before you submit the test and/or close the browser.</li>
+          </ol>
+        </div>
+        <aside class="profile-panel">
+          <div class="avatar">A</div>
+          <div class="candidate-name">Anant</div>
+        </aside>
+        <div class="declaration-bar">
+          <label class="language-line">Choose your default language:
+            <select id="languageSelect">
+              <option value="">-- Select --</option>
+              <option value="English">English</option>
+              <option value="Hindi">Hindi</option>
+            </select>
+          </label>
+          <p class="red">Please note all questions will appear in your default language. This language can be changed for a particular question later on</p>
+          <hr />
+          <strong>Declaration:</strong>
+          <label class="check-line"><input id="agreeCheck" type="checkbox" /> I have understood and agree to all the instructions.</label>
+        </div>
+        <footer class="bottom-bar">
+          <button id="backToGeneral" class="primary-light">Previous</button>
+          <button id="beginBtn" class="cyan-btn" disabled>I am ready to begin</button>
+        </footer>
+      </section>
+
+      <section id="examScreen" class="screen exam-screen hidden">
+        <nav class="section-bar">
+          <span>SECTIONS</span>
+          <button class="section-tab">Chapter Test</button>
+        </nav>
+        <div class="question-area">
+          <div class="question-main">
+            <div class="question-toolbar">
+              <div class="q-number">Question No. <span id="questionNo">1</span></div>
+              <div class="q-tools">
+                <div>Marks <span class="mark plus">+1</span> <span class="mark minus">-0.25</span></div>
+                <div>Time<br /><span id="questionTime">00:00</span></div>
+                <label>View in
+                  <select id="questionLang">
+                    <option>English</option>
+                    <option>Hindi</option>
+                  </select>
+                </label>
+                <button id="reportBtn" class="report-btn">! Report</button>
+              </div>
+            </div>
+            <div class="question-copy">
+              <p id="questionText"></p>
+              <div id="optionList" class="option-list"></div>
+            </div>
+          </div>
+          <aside id="sidePanel" class="question-panel">
+            <div class="candidate-mini">
+              <div class="avatar small">A</div>
+              <span>Anant</span>
+            </div>
+            <div class="status-summary">
+              <span><b id="answeredCount" class="answered pill">0</b> Answered</span>
+              <span><b id="markedCount" class="marked pill">0</b> Marked</span>
+              <span><b id="notVisitedCount" class="not-visited pill">10</b> Not Visited</span>
+              <span><b id="markedAnsweredCount" class="marked-answered pill">0</b> Marked and answered</span>
+              <span><b id="notAnsweredCount" class="not-answered pill">0</b> Not Answered</span>
+            </div>
+            <div class="palette-title"><strong>SECTION :</strong> Chapter Test</div>
+            <div id="palette" class="palette"></div>
+            <div class="panel-actions">
+              <button id="questionPaperBtn" class="primary-light">Question Paper</button>
+              <button id="instructionsBtn" class="primary-light">Instructions</button>
+              <button id="submitBtn" class="cyan-btn wide">Submit Test</button>
+            </div>
+          </aside>
+          <button id="togglePanel" class="panel-toggle">&rsaquo;</button>
+        </div>
+        <footer class="exam-footer">
+          <div>
+            <button id="markNextBtn" class="primary-light">Mark for Review &amp; Next</button>
+            <button id="clearBtn" class="primary-light">Clear Response</button>
+          </div>
+          <button id="saveNextBtn" class="cyan-btn">Save &amp; Next</button>
+        </footer>
+      </section>
+    </main>
+
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <h2 id="modalTitle"></h2>
+        <div id="modalBody"></div>
+        <div class="modal-actions">
+          <button id="modalCancel" class="primary-light">Cancel</button>
+          <button id="modalOk" class="cyan-btn">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
