@@ -68,8 +68,6 @@ const state = {
 const el = (id) => document.getElementById(id);
 
 const refs = {
-  launch: el("launch"),
-  launchBtn: el("launchBtn"),
   app: el("app"),
   generalScreen: el("generalScreen"),
   testInfoScreen: el("testInfoScreen"),
@@ -311,12 +309,7 @@ function submitTest(auto = false) {
 }
 
 function bindEvents() {
-  refs.launchBtn.addEventListener("click", () => {
-    requestFullScreen();
-    refs.launch.classList.add("hidden");
-    refs.app.classList.remove("hidden");
-    showScreen("general");
-  });
+  document.addEventListener("click", requestFullScreen, { once: true });
 
   refs.generalNext.addEventListener("click", () => showScreen("info"));
   refs.closeGeneral.addEventListener("click", () => showScreen("info"));
@@ -369,8 +362,6 @@ renderTimer();
 
 const preview = new URLSearchParams(window.location.search).get("preview");
 if (["general", "info", "exam"].includes(preview)) {
-  refs.launch.classList.add("hidden");
-  refs.app.classList.remove("hidden");
   showScreen(preview);
   if (preview === "exam") {
     goToQuestion(0);

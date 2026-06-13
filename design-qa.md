@@ -8,7 +8,7 @@ Reference states checked:
 - Active exam screen: matched timer header, section tab, question toolbar, answer options, right question palette, status counters, and fixed exam controls.
 
 Functional checks:
-- Launch button requests fullscreen and enters the CBT flow.
+- First user click inside the CBT interface requests fullscreen.
 - General instructions advance to the declaration screen.
 - Begin button requires language selection and declaration checkbox.
 - Timer starts at 8 minutes on exam start.

@@ -1,5 +1,7 @@
 chrome-profile/
+chrome-profile-ref/
 qa-*.png
+claude-artifact.html
 node_modules/
 .DS_Store
 Thumbs.db

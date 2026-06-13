@@ -87,6 +87,8 @@ button {
 
 .brand-name {
   color: var(--cyan);
+  display: inline-block;
+  width: 176px;
   font-weight: 800;
   font-size: 34px;
   letter-spacing: 0;
@@ -357,12 +359,16 @@ button {
   left: 0;
   right: 310px;
   bottom: 54px;
-  min-height: 190px;
+  height: 190px;
   background: #ffffff;
   border-top: 1px solid #d8d8d8;
   box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.12);
   padding: 18px 20px;
   font-size: 18px;
+}
+
+.info-screen .content-pane {
+  height: calc(100vh - 66px - 244px);
 }
 
 .language-line select,

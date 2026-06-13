@@ -14,7 +14,7 @@ Open:
 http://127.0.0.1:4173
 ```
 
-The launch button requests fullscreen and opens the CBT flow. Browsers require fullscreen to be triggered by a user click, so the prototype starts with a click-to-launch screen.
+The first click inside the CBT interface requests fullscreen. Browsers require fullscreen to be triggered by a user gesture, so the app renders the exam interface immediately and requests fullscreen on the user's first interaction.
 
 ## Included
 
