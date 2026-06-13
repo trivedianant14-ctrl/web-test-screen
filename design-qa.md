@@ -3,18 +3,16 @@
 final result: passed
 
 Reference states checked:
-- General instructions screen: matched header, content scroll area, right candidate panel, legend symbols, and fixed footer controls.
-- Test declaration screen: matched title placement, duration/marks row, declaration block, language selector, and bottom navigation.
-- Active exam screen: matched timer header, section tab, question toolbar, answer options, right question palette, status counters, and fixed exam controls.
+- General instructions screen: removed the close/X control and reduced the instruction text size.
+- Active NORCET-style exam screen: matched the dark blue title bar, candidate strip, section tabs, marks row, right question palette, diamond current/not-answered marker, grey unvisited buttons, submit button, and bottom navigation controls from the supplied reference screenshots.
 
 Functional checks:
 - First user click inside the CBT interface requests fullscreen.
 - General instructions advance to the declaration screen.
 - Begin button requires language selection and declaration checkbox.
-- Timer starts at 8 minutes on exam start.
-- Question palette, Save & Next, Mark for Review & Next, Clear Response, Question Paper, Instructions, Pause, panel toggle, and Submit Test are wired.
-- Initial active question state matches the reference: current question is highlighted while all questions remain counted as not visited until user action.
+- Timer starts at 90 minutes on exam start.
+- Question palette, Previous, Save & Next, Mark for Review & Next, Clear Response, and Submit Exam are wired.
+- Initial active question state matches the NORCET reference: question 1 is a red diamond and the remaining questions are grey unvisited boxes.
 
 Known intentional differences:
-- Testbook branding and logo are not copied. The header uses plain NPrep text branding only.
-- Candidate avatar is a generic generated-style visual, not the copied reference photo.
+- The photo area uses a neutral "Photo" placeholder rather than a real candidate photograph.

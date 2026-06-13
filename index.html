@@ -3,29 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NPrep CBT Test Prototype</title>
+    <title>NPrep NORCET CBT Prototype</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main id="app" class="app">
-      <header class="topbar">
+      <header id="topbar" class="topbar">
         <div class="brand">
           <span class="brand-name">NPrep</span>
-          <span class="test-title">RRB Staff Nurse Introduction: Sensory Organs</span>
-        </div>
-        <div id="examTimer" class="exam-timer hidden" aria-live="polite">
-          <strong>Time Left</strong>
-          <span id="timerBox">00 : 08 : 00</span>
-        </div>
-        <div id="examActions" class="exam-actions hidden">
-          <button id="fullscreenBtn" class="outline-btn">Switch Full Screen</button>
-          <button id="pauseBtn" class="outline-btn">Pause</button>
+          <span class="test-title">AIIMS NORCET — Nursing Officer Recruitment Common Eligibility Test (Stage I)</span>
         </div>
       </header>
 
       <section id="generalScreen" class="screen general-screen">
         <div class="content-pane scroll-pane">
-          <button id="closeGeneral" class="close-button" aria-label="Close instructions">x</button>
           <h2>General Instructions:</h2>
           <ol class="instruction-list">
             <li>The clock will be set at the server. The countdown timer at the top right corner of screen will display the remaining time available for you to complete the examination. When the timer reaches zero, the examination will end by itself.</li>
@@ -89,7 +80,7 @@
 
       <section id="testInfoScreen" class="screen info-screen hidden">
         <div class="content-pane info-content">
-          <h1>RRB Staff Nurse Introduction: Sensory Organs</h1>
+          <h1>AIIMS NORCET — Nursing Officer Recruitment Common Eligibility Test (Stage I)</h1>
           <div class="meta-row">
             <strong>Duration: 8 Mins</strong>
             <strong>Maximum Marks: 10</strong>
@@ -128,60 +119,72 @@
       </section>
 
       <section id="examScreen" class="screen exam-screen hidden">
-        <nav class="section-bar">
-          <span>SECTIONS</span>
-          <button class="section-tab">Chapter Test</button>
-        </nav>
-        <div class="question-area">
-          <div class="question-main">
-            <div class="question-toolbar">
-              <div class="q-number">Question No. <span id="questionNo">1</span></div>
-              <div class="q-tools">
-                <div>Marks <span class="mark plus">+1</span> <span class="mark minus">-0.25</span></div>
-                <div>Time<br /><span id="questionTime">00:00</span></div>
-                <label>View in
-                  <select id="questionLang">
-                    <option>English</option>
-                    <option>Hindi</option>
-                  </select>
-                </label>
-                <button id="reportBtn" class="report-btn">! Report</button>
+        <div class="norcet-shell">
+          <div class="norcet-titlebar">
+            <strong>AIIMS NORCET — Nursing Officer Recruitment Common Eligibility Test (Stage I)</strong>
+            <label>View in
+              <select id="questionLang">
+                <option>English</option>
+                <option>Hindi</option>
+              </select>
+            </label>
+          </div>
+          <div class="candidate-strip">
+            <div class="photo-box">Photo</div>
+            <div class="candidate-data">
+              <div><strong>Candidate Name:</strong> Anant Trivedi</div>
+              <div><strong>Roll No:</strong> 10024156 <strong class="subject-label">Subject:</strong> Nursing Officer</div>
+            </div>
+            <div class="exam-meta">
+              <div><strong>Total Time Remaining:</strong> <span id="timerBox">01:30:00</span></div>
+              <div><strong>Exam Date:</strong> 13-Jun-2026</div>
+            </div>
+          </div>
+          <nav class="norcet-sections">
+            <button class="norcet-section active"><strong>Section A — Nursing Foundations</strong><span id="sectionTimeA">00:17:37</span></button>
+            <button class="norcet-section">Section B — Medical Surgical Nursing<span>00:18:00</span></button>
+            <button class="norcet-section">Section C — Child Health Nursing<span>00:18:00</span></button>
+            <button class="norcet-section">Section D — Community Health / Mental Health<span>00:18:00</span></button>
+            <button class="norcet-section">Section E — GK &amp; Aptitude<span>00:18:00</span></button>
+          </nav>
+          <div class="norcet-body">
+            <div class="norcet-question-pane">
+              <div class="norcet-question-head">
+                <strong>Question No. <span id="questionNo">1</span></strong>
+                <span>Marks: <span class="marks-positive">+1</span> / <span class="marks-negative">-0.33</span></span>
+              </div>
+              <div class="question-copy">
+                <p id="questionText"></p>
+                <div id="optionList" class="option-list"></div>
               </div>
             </div>
-            <div class="question-copy">
-              <p id="questionText"></p>
-              <div id="optionList" class="option-list"></div>
-            </div>
+            <aside id="sidePanel" class="norcet-palette">
+              <div class="palette-heading">Question Palette</div>
+              <div class="status-summary">
+                <span><b id="answeredCount" class="answered pill">0</b> Answered</span>
+                <span><b id="notAnsweredCount" class="not-answered pill">0</b> Not Answered</span>
+                <span><b id="notVisitedCount" class="not-visited pill">20</b> Not Visited</span>
+                <span><b id="markedCount" class="marked pill">0</b> Marked</span>
+                <span class="marked-wide"><b id="markedAnsweredCount" class="marked-answered pill">0</b> Answered &amp; Marked for Review (will be evaluated)</span>
+              </div>
+              <div class="palette-title"><strong>Section A — Nursing Foundations</strong></div>
+              <div id="palette" class="palette"></div>
+              <div class="panel-actions">
+                <button id="submitBtn" class="submit-exam">Submit Exam</button>
+              </div>
+            </aside>
           </div>
-          <aside id="sidePanel" class="question-panel">
-            <div class="candidate-mini">
-              <div class="avatar small">A</div>
-              <span>Anant</span>
+          <footer class="exam-footer">
+            <div>
+              <button id="markNextBtn" class="norcet-light-btn">Mark for Review &amp; Next</button>
+              <button id="clearBtn" class="norcet-light-btn">Clear Response</button>
             </div>
-            <div class="status-summary">
-              <span><b id="answeredCount" class="answered pill">0</b> Answered</span>
-              <span><b id="markedCount" class="marked pill">0</b> Marked</span>
-              <span><b id="notVisitedCount" class="not-visited pill">10</b> Not Visited</span>
-              <span><b id="markedAnsweredCount" class="marked-answered pill">0</b> Marked and answered</span>
-              <span><b id="notAnsweredCount" class="not-answered pill">0</b> Not Answered</span>
+            <div>
+              <button id="prevBtn" class="norcet-light-btn">&laquo; Previous</button>
+              <button id="saveNextBtn" class="save-next">Save &amp; Next</button>
             </div>
-            <div class="palette-title"><strong>SECTION :</strong> Chapter Test</div>
-            <div id="palette" class="palette"></div>
-            <div class="panel-actions">
-              <button id="questionPaperBtn" class="primary-light">Question Paper</button>
-              <button id="instructionsBtn" class="primary-light">Instructions</button>
-              <button id="submitBtn" class="cyan-btn wide">Submit Test</button>
-            </div>
-          </aside>
-          <button id="togglePanel" class="panel-toggle">&rsaquo;</button>
+          </footer>
         </div>
-        <footer class="exam-footer">
-          <div>
-            <button id="markNextBtn" class="primary-light">Mark for Review &amp; Next</button>
-            <button id="clearBtn" class="primary-light">Clear Response</button>
-          </div>
-          <button id="saveNextBtn" class="cyan-btn">Save &amp; Next</button>
-        </footer>
       </section>
     </main>
 

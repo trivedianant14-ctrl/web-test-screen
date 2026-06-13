@@ -1,6 +1,6 @@
-# NPrep CBT Prototype
+# NPrep NORCET CBT Prototype
 
-Working browser prototype of a CBT exam experience for NPrep.
+Working browser prototype of a NORCET-style CBT exam experience for NPrep.
 
 ## Run locally
 
@@ -20,10 +20,10 @@ The first click inside the CBT interface requests fullscreen. Browsers require f
 
 - General instructions screen
 - Test declaration and language gate
-- Active CBT exam screen
-- Countdown timer
-- Question palette statuses
-- Save, mark for review, clear response, pause, submit, instructions, and question paper interactions
+- Active NORCET-style exam screen
+- 90-minute countdown timer
+- Section tabs and right-side question palette
+- Previous, Save & Next, Mark for Review & Next, Clear Response, and Submit Exam interactions
 
 ## Deploying on Vercel
 
