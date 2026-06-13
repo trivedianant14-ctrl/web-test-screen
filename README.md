@@ -27,4 +27,4 @@ The launch button requests fullscreen and opens the CBT flow. Browsers require f
 
 ## Deploying on Vercel
 
-This is a static site. Vercel should serve `index.html` directly from the repository root. The local Node server is named `local-server.js` so Vercel does not confuse it with a production serverless entry point.
+This is a static site. `vercel.json` explicitly uses Vercel's static builder for `index.html`, `styles.css`, and `app.js`. The local Node server is named `local-server.js` so it is not used as a production serverless entry point.
