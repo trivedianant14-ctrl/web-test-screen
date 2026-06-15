@@ -279,7 +279,7 @@
         <!-- Section tabs -->
         <nav class="norcet-sections" id="sectionTabs"></nav>
 
-        <!-- Body: question pane + palette -->
+        <!-- Body: question pane + palette toggle strip + palette -->
         <div class="norcet-body">
 
           <div class="norcet-question-pane">
@@ -292,11 +292,17 @@
             </div>
             <div class="question-body">
               <p id="questionText" class="question-text"></p>
+              <div id="questionImageWrap" class="q-image-wrap hidden"></div>
               <div id="optionList" class="option-list"></div>
             </div>
           </div>
 
-          <aside class="norcet-palette">
+          <!-- Palette collapse/expand strip -->
+          <button id="paletteCollapseBtn" class="palette-collapse-strip" title="Toggle Question Palette (P)">
+            <span id="paletteArrow">&#9664;</span>
+          </button>
+
+          <aside id="norcetPalette" class="norcet-palette">
             <div class="palette-heading">Question Palette</div>
             <div class="status-summary">
               <span><b id="answeredCount" class="pill answered">0</b> Answered</span>

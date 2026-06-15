@@ -1,7 +1,13 @@
 /* ── Questions ── */
 const questions = [
   // Section A — Nursing Foundations (Q1–4)
-  { text: "A patient is admitted with severe dehydration. What is the priority nursing action?", options: ["Administer prescribed IV fluids", "Record intake and output", "Encourage oral fluids", "Assess skin turgor"], answer: 0 },
+  {
+    text: "Study the 12-lead ECG tracing shown below carefully (scroll right to view all leads). Based on the rhythm and waveform characteristics observed, identify the most appropriate immediate nursing action.",
+    image: "https://upload.wikimedia.org/wikipedia/commons/b/bd/12leadECG.jpg",
+    imageLarge: true,
+    options: ["Prepare for immediate defibrillation", "Document as Normal Sinus Rhythm and continue monitoring", "Administer IV Atropine as prescribed", "Elevate head of bed and administer O₂"],
+    answer: 1
+  },
   { text: "The best method to prevent hospital-acquired infection is:", options: ["Hand hygiene", "Bed making", "Patient counselling", "Early discharge"], answer: 0 },
   { text: "The first step in the nursing process is:", options: ["Planning", "Implementation", "Assessment", "Evaluation"], answer: 2 },
   { text: "The purpose of informed consent is to:", options: ["Reduce nursing workload", "Protect patient autonomy", "Increase bed occupancy", "Avoid documentation"], answer: 1 },
@@ -16,7 +22,13 @@ const questions = [
   { text: "A sterile field is considered contaminated when it is:", options: ["Kept dry", "Below waist level", "Opened just before use", "Touched only with sterile gloves"], answer: 1 },
   { text: "The most reliable site for measuring core body temperature is:", options: ["Axilla", "Oral cavity", "Rectum", "Skin"], answer: 2 },
   { text: "Organ of Corti is concerned with:", options: ["Vision", "Hearing", "Smell", "Taste"], answer: 1 },
-  { text: "The auditory ossicles are located in the:", options: ["External ear", "Middle ear", "Internal ear", "Cochlea"], answer: 1 },
+  {
+    text: "Examine the chest X-ray image shown below. Which of the following clinical findings is most consistent with this radiograph?",
+    image: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Chest_X-ray_PA_3-8-2010.png",
+    imageLarge: false,
+    options: ["Tension pneumothorax", "Bilateral pleural effusion", "Normal chest X-ray", "Cardiomegaly with pulmonary oedema"],
+    answer: 2
+  },
 
   // Section D — Community Health / Mental Health (Q13–16)
   { text: "Which structure regulates the amount of light entering the eye?", options: ["Pupil", "Lens", "Retina", "Sclera"], answer: 0 },
@@ -53,7 +65,8 @@ const state = {
   expired:        Array(sections.length).fill(false),
   timerInterval:  null,
   submitted:      false,
-  qpOpen:         false
+  qpOpen:         false,
+  paletteOpen:    true
 };
 
 /* ── DOM ── */
@@ -84,17 +97,21 @@ const refs = {
   prevBtn:             el("prevBtn"),
   saveNextBtn:         el("saveNextBtn"),
   submitBtn:           el("submitBtn"),
-  submitModal:         el("submitModal"),
-  summaryBody:         el("summaryBody"),
-  summaryFoot:         el("summaryFoot"),
-  cancelSubmit:        el("cancelSubmit"),
-  confirmSubmit:       el("confirmSubmit"),
-  resultModal:         el("resultModal"),
-  closeResult:         el("closeResult"),
-  qpToggleBtn:         el("qpToggleBtn"),
-  qpOverlay:           el("qpOverlay"),
-  qpContent:           el("qpContent"),
-  closeQP:             el("closeQP")
+  submitModal:          el("submitModal"),
+  summaryBody:          el("summaryBody"),
+  summaryFoot:          el("summaryFoot"),
+  cancelSubmit:         el("cancelSubmit"),
+  confirmSubmit:        el("confirmSubmit"),
+  resultModal:          el("resultModal"),
+  closeResult:          el("closeResult"),
+  qpToggleBtn:          el("qpToggleBtn"),
+  qpOverlay:            el("qpOverlay"),
+  qpContent:            el("qpContent"),
+  closeQP:              el("closeQP"),
+  paletteCollapseBtn:   el("paletteCollapseBtn"),
+  paletteArrow:         el("paletteArrow"),
+  norcetPalette:        el("norcetPalette"),
+  questionImageWrap:    el("questionImageWrap")
 };
 
 /* ════════════════════════════════
@@ -247,6 +264,68 @@ function renderQuestion() {
   refs.questionText.textContent = q.text;
   refs.optionList.innerHTML = "";
 
+  // ── Image ──
+  const wrap = refs.questionImageWrap;
+  if (q.image) {
+    wrap.className = q.imageLarge ? "q-image-wrap q-image-large" : "q-image-wrap q-image-normal";
+    wrap.innerHTML = "";
+
+    const img = document.createElement("img");
+    img.src = q.image;
+    img.alt = "Question image";
+    img.draggable = false;
+
+    wrap.appendChild(img);
+
+    // Enable mouse-drag scrolling on the large container
+    if (q.imageLarge) {
+      let isDragging = false, startX = 0, startY = 0, scrollLeft = 0, scrollTop = 0;
+      wrap.addEventListener("mousedown", e => {
+        isDragging = true;
+        startX = e.pageX - wrap.offsetLeft;
+        startY = e.pageY - wrap.offsetTop;
+        scrollLeft = wrap.scrollLeft;
+        scrollTop  = wrap.scrollTop;
+        wrap.style.cursor = "grabbing";
+      });
+      wrap.addEventListener("mouseleave", () => { isDragging = false; wrap.style.cursor = "grab"; });
+      wrap.addEventListener("mouseup",    () => { isDragging = false; wrap.style.cursor = "grab"; });
+      wrap.addEventListener("mousemove", e => {
+        if (!isDragging) return;
+        e.preventDefault();
+        wrap.scrollLeft = scrollLeft - (e.pageX - wrap.offsetLeft - startX);
+        wrap.scrollTop  = scrollTop  - (e.pageY - wrap.offsetTop  - startY);
+      });
+
+      // Touch drag support
+      let tStartX = 0, tStartY = 0, tScrollLeft = 0, tScrollTop = 0;
+      wrap.addEventListener("touchstart", e => {
+        tStartX = e.touches[0].pageX; tStartY = e.touches[0].pageY;
+        tScrollLeft = wrap.scrollLeft; tScrollTop = wrap.scrollTop;
+      }, { passive: true });
+      wrap.addEventListener("touchmove", e => {
+        wrap.scrollLeft = tScrollLeft - (e.touches[0].pageX - tStartX);
+        wrap.scrollTop  = tScrollTop  - (e.touches[0].pageY - tStartY);
+      }, { passive: true });
+    }
+
+    const note = document.createElement("p");
+    note.className = "q-image-note";
+    note.textContent = q.imageLarge
+      ? "Scroll or drag the image to view all areas."
+      : "";
+    wrap.after(note);
+  } else {
+    wrap.className = "q-image-wrap hidden";
+    wrap.innerHTML = "";
+    // Remove stale note if any
+    const staleNote = wrap.nextSibling;
+    if (staleNote && staleNote.classList && staleNote.classList.contains("q-image-note")) {
+      staleNote.remove();
+    }
+  }
+
+  // ── Options ──
   q.options.forEach((opt, oi) => {
     const id = `opt-${state.currentQ}-${oi}`;
     const label = document.createElement("label");
@@ -271,6 +350,15 @@ function renderQuestion() {
     label.append(radio, span);
     refs.optionList.appendChild(label);
   });
+}
+
+/* ════════════════════════════════
+   PALETTE COLLAPSE TOGGLE
+   ════════════════════════════════ */
+function togglePalette() {
+  state.paletteOpen = !state.paletteOpen;
+  refs.norcetPalette.classList.toggle("palette-collapsed", !state.paletteOpen);
+  refs.paletteArrow.innerHTML = state.paletteOpen ? "&#9664;" : "&#9654;";
 }
 
 /* ════════════════════════════════
@@ -534,19 +622,27 @@ function bindEvents() {
   refs.closeQP.addEventListener("click", closeQP);
   refs.qpOverlay.addEventListener("click", e => { if (e.target === refs.qpOverlay) closeQP(); });
 
+  // Palette collapse strip
+  refs.paletteCollapseBtn.addEventListener("click", togglePalette);
+
   // Keyboard shortcuts
   document.addEventListener("keydown", e => {
     const tag = document.activeElement.tagName;
     const inInput = tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA";
     if (inInput) return;
+    if (refs.examScreen.classList.contains("hidden")) return;
 
+    // Question Paper panel: → or Q
     if (e.key === "ArrowRight" || e.key === "q" || e.key === "Q") {
-      if (!refs.examScreen.classList.contains("hidden")) {
-        state.qpOpen ? closeQP() : openQP();
-      }
+      state.qpOpen ? closeQP() : openQP();
     }
-    if (e.key === "Escape" || e.key === "ArrowLeft") {
-      if (state.qpOpen) closeQP();
+    // Close QP: ← or Esc
+    if ((e.key === "Escape" || e.key === "ArrowLeft") && state.qpOpen) {
+      closeQP();
+    }
+    // Palette toggle: P
+    if (e.key === "p" || e.key === "P") {
+      togglePalette();
     }
   });
 
