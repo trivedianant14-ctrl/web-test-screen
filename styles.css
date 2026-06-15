@@ -561,6 +561,26 @@ p { font-size: 15px; line-height: 1.6; }
   color: #666;
 }
 
+.section-tab.sec-past {
+  background: #d0e8d0;
+  color: #2a6e2a;
+  cursor: not-allowed;
+}
+
+.section-tab.sec-future {
+  background: #e0e0e0;
+  color: #888;
+  cursor: not-allowed;
+}
+
+/* Disabled state overrides pointer for all locked tabs */
+.section-tab:disabled {
+  cursor: default;
+}
+.section-tab.active:disabled {
+  cursor: default;
+}
+
 /* Body */
 .norcet-body {
   flex: 1;
@@ -1078,9 +1098,15 @@ kbd {
   transition: background 0.1s;
 }
 
-.qp-q-row:hover { background: #f0f5ff; border-color: #c8d8f0; }
+.qp-q-row:not(.qp-locked):hover { background: #f0f5ff; border-color: #c8d8f0; }
 
 .qp-q-row.qp-current { background: #e8f0ff; border-color: #9ab8e8; }
+
+.qp-q-row.qp-locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: #f7f7f7;
+}
 
 .qp-num {
   font-weight: 700;

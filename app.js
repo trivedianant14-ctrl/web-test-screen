@@ -154,7 +154,7 @@ function onSectionExpired(si) {
   showToast(`Time up for ${sections[si].name}! Moving to next section…`);
   const nextSi = si + 1;
   if (nextSi < sections.length) {
-    goTo(sections[nextSi].ids[0]);
+    goTo(sections[nextSi].ids[0], true); // force cross-section switch
   } else {
     setTimeout(() => autoSubmit(), 1800);
   }
@@ -182,13 +182,18 @@ function qStatus(i) {
 /* ════════════════════════════════
    NAVIGATION
    ════════════════════════════════ */
-function goTo(index) {
+function goTo(index, force = false) {
   const next = Math.max(0, Math.min(questions.length - 1, index));
+  const targetSection = sections.findIndex(s => s.ids.includes(next));
+
+  // Block cross-section jumps unless triggered by the timer (force = true)
+  if (!force && targetSection !== state.currentSection) return;
+
   if (!state.saved[state.currentQ] && !state.marked[state.currentQ]) {
     state.visited[state.currentQ] = true;
   }
   state.currentQ = next;
-  state.currentSection = sections.findIndex(s => s.ids.includes(next));
+  state.currentSection = targetSection;
   renderAll();
 }
 
@@ -199,20 +204,36 @@ function renderSectionTabs() {
   refs.sectionTabs.innerHTML = "";
   sections.forEach((sec, si) => {
     const btn = document.createElement("button");
-    const isActive = si === state.currentSection;
+    const isActive  = si === state.currentSection;
+    const isPast    = si < state.currentSection;
+    const isFuture  = si > state.currentSection;
     const isExpired = state.expired[si];
-    btn.className = `section-tab${isActive ? " active" : ""}${isExpired ? " sec-expired" : ""}`;
+
+    btn.className = [
+      "section-tab",
+      isActive  ? "active"      : "",
+      isPast    ? "sec-past"    : "",
+      isFuture  ? "sec-future"  : "",
+      isExpired ? "sec-expired" : ""
+    ].filter(Boolean).join(" ");
+
+    // Tabs are non-interactive — navigation locked to one direction
+    btn.disabled = true;
+    btn.title = isActive
+      ? "Current section"
+      : isPast
+        ? "Completed — cannot go back"
+        : "Locked — complete current section first";
 
     const nameSpan = document.createElement("span");
     nameSpan.className = "tab-name";
-    nameSpan.textContent = sec.name;
+    nameSpan.textContent = isPast ? `✓ ${sec.name}` : isFuture ? `🔒 ${sec.name}` : sec.name;
 
     const timeSpan = document.createElement("span");
-    timeSpan.className = `tab-time${isExpired ? " expired" : ""}`;
-    timeSpan.textContent = isExpired ? "00:00" : formatSectionTime(state.sectionTimers[si]);
+    timeSpan.className = `tab-time${(isExpired || isPast) ? " expired" : ""}`;
+    timeSpan.textContent = isPast ? "Done" : isExpired ? "00:00" : formatSectionTime(state.sectionTimers[si]);
 
     btn.append(nameSpan, timeSpan);
-    btn.addEventListener("click", () => goTo(sec.ids[0]));
     refs.sectionTabs.appendChild(btn);
   });
 }
@@ -313,11 +334,11 @@ function saveCurrent(markForReview) {
   const pos = sec.ids.indexOf(state.currentQ);
 
   if (pos < sec.ids.length - 1) {
-    goTo(sec.ids[pos + 1]);
-  } else if (state.currentSection < sections.length - 1) {
-    goTo(sections[state.currentSection + 1].ids[0]);
+    goTo(sec.ids[pos + 1]); // move within same section
   } else {
+    // Last question of section — stay here, section switch happens only via timer
     renderAll();
+    showToast("Last question of this section. Wait for the timer to unlock the next section.");
   }
 }
 
@@ -358,10 +379,16 @@ function renderQPContent() {
     titleDiv.appendChild(timeSpan);
     secDiv.appendChild(titleDiv);
 
+    const isCurrentSection = si === state.currentSection;
+
     sec.ids.forEach(qi => {
       const row = document.createElement("div");
       const status = qStatus(qi);
-      row.className = `qp-q-row${qi === state.currentQ ? " qp-current" : ""}`;
+      row.className = [
+        "qp-q-row",
+        qi === state.currentQ ? "qp-current" : "",
+        !isCurrentSection    ? "qp-locked"  : ""
+      ].filter(Boolean).join(" ");
 
       const numSpan = document.createElement("span");
       numSpan.className = "qp-num";
@@ -377,10 +404,14 @@ function renderQPContent() {
         : questions[qi].text;
 
       row.append(numSpan, dot, txt);
-      row.addEventListener("click", () => {
-        closeQP();
-        goTo(qi);
-      });
+
+      if (isCurrentSection) {
+        row.addEventListener("click", () => { closeQP(); goTo(qi); });
+      } else {
+        row.title = si < state.currentSection
+          ? "This section is closed"
+          : "Locked — complete current section first";
+      }
       secDiv.appendChild(row);
     });
 
@@ -488,11 +519,9 @@ function bindEvents() {
     const sec = sections[state.currentSection];
     const pos = sec.ids.indexOf(state.currentQ);
     if (pos > 0) {
-      goTo(sec.ids[pos - 1]);
-    } else if (state.currentSection > 0) {
-      const prevSec = sections[state.currentSection - 1];
-      goTo(prevSec.ids[prevSec.ids.length - 1]);
+      goTo(sec.ids[pos - 1]); // within same section only
     }
+    // No cross-section back navigation
   });
 
   refs.submitBtn.addEventListener("click", showSubmitModal);
