@@ -31,75 +31,81 @@ const questions = [
   { text: "Sensitive pigmented layer of the eye is:", options: ["Cornea", "Retina", "Sclerotic", "Iris"], answer: 1 }
 ];
 
+const SECTION_DURATION = 20 * 60; // 20 minutes in seconds
+
 const sections = [
-  { name: "Section A — Nursing Foundations",           ids: [0, 1, 2, 3] },
-  { name: "Section B — Medical Surgical Nursing",       ids: [4, 5, 6, 7] },
-  { name: "Section C — Child Health Nursing",           ids: [8, 9, 10, 11] },
-  { name: "Section D — Community Health / Mental Health", ids: [12, 13, 14, 15] },
-  { name: "Section E — GK & Aptitude",                 ids: [16, 17, 18, 19] }
+  { name: "Section A",  fullName: "Section A — Nursing Foundations",              ids: [0, 1, 2, 3] },
+  { name: "Section B",  fullName: "Section B — Medical Surgical Nursing",          ids: [4, 5, 6, 7] },
+  { name: "Section C",  fullName: "Section C — Child Health Nursing",              ids: [8, 9, 10, 11] },
+  { name: "Section D",  fullName: "Section D — Community Health / Mental Health",  ids: [12, 13, 14, 15] },
+  { name: "Section E",  fullName: "Section E — GK & Aptitude",                    ids: [16, 17, 18, 19] }
 ];
 
 /* ── State ── */
 const state = {
-  currentQ: 0,
+  currentQ:       0,
   currentSection: 0,
-  answers:  Array(questions.length).fill(null),
-  saved:    Array(questions.length).fill(false),
-  marked:   Array(questions.length).fill(false),
-  visited:  Array(questions.length).fill(false),
-  remainingSeconds: 90 * 60,
-  timerInterval: null,
-  submitted: false,
-  language: "English"
+  answers:        Array(questions.length).fill(null),
+  saved:          Array(questions.length).fill(false),
+  marked:         Array(questions.length).fill(false),
+  visited:        Array(questions.length).fill(false),
+  sectionTimers:  Array(sections.length).fill(SECTION_DURATION),
+  expired:        Array(sections.length).fill(false),
+  timerInterval:  null,
+  submitted:      false,
+  qpOpen:         false
 };
 
-/* ── DOM helpers ── */
-const el = (id) => document.getElementById(id);
+/* ── DOM ── */
+const el = id => document.getElementById(id);
 
 const refs = {
-  landingScreen:      el("landingScreen"),
-  instructionsScreen: el("instructionsScreen"),
-  examScreen:         el("examScreen"),
-  startTestBtn:       el("startTestBtn"),
-  backToLanding:      el("backToLanding"),
-  languageSelect:     el("languageSelect"),
-  agreeCheck:         el("agreeCheck"),
-  beginBtn:           el("beginBtn"),
-  timerDisplay:       el("timerDisplay"),
-  sectionTabs:        el("sectionTabs"),
-  questionNo:         el("questionNo"),
-  questionText:       el("questionText"),
-  optionList:         el("optionList"),
-  palette:            el("palette"),
+  landingScreen:       el("landingScreen"),
+  instructionsScreen:  el("instructionsScreen"),
+  examScreen:          el("examScreen"),
+  startTestBtn:        el("startTestBtn"),
+  backToLanding:       el("backToLanding"),
+  agreeCheck:          el("agreeCheck"),
+  beginBtn:            el("beginBtn"),
+  timerDisplay:        el("timerDisplay"),
+  sectionTabs:         el("sectionTabs"),
+  questionNo:          el("questionNo"),
+  questionText:        el("questionText"),
+  optionList:          el("optionList"),
+  palette:             el("palette"),
   paletteSectionTitle: el("paletteSectionTitle"),
-  answeredCount:      el("answeredCount"),
-  notAnsweredCount:   el("notAnsweredCount"),
-  notVisitedCount:    el("notVisitedCount"),
-  markedCount:        el("markedCount"),
+  answeredCount:       el("answeredCount"),
+  notAnsweredCount:    el("notAnsweredCount"),
+  notVisitedCount:     el("notVisitedCount"),
+  markedCount:         el("markedCount"),
   markedAnsweredCount: el("markedAnsweredCount"),
-  markNextBtn:        el("markNextBtn"),
-  clearBtn:           el("clearBtn"),
-  prevBtn:            el("prevBtn"),
-  saveNextBtn:        el("saveNextBtn"),
-  submitBtn:          el("submitBtn"),
-  questionLang:       el("questionLang"),
-  submitModal:        el("submitModal"),
-  summaryBody:        el("summaryBody"),
-  summaryFoot:        el("summaryFoot"),
-  cancelSubmit:       el("cancelSubmit"),
-  confirmSubmit:      el("confirmSubmit"),
-  resultModal:        el("resultModal"),
-  closeResult:        el("closeResult")
+  markNextBtn:         el("markNextBtn"),
+  clearBtn:            el("clearBtn"),
+  prevBtn:             el("prevBtn"),
+  saveNextBtn:         el("saveNextBtn"),
+  submitBtn:           el("submitBtn"),
+  submitModal:         el("submitModal"),
+  summaryBody:         el("summaryBody"),
+  summaryFoot:         el("summaryFoot"),
+  cancelSubmit:        el("cancelSubmit"),
+  confirmSubmit:       el("confirmSubmit"),
+  resultModal:         el("resultModal"),
+  closeResult:         el("closeResult"),
+  qpToggleBtn:         el("qpToggleBtn"),
+  qpOverlay:           el("qpOverlay"),
+  qpContent:           el("qpContent"),
+  closeQP:             el("closeQP")
 };
 
-/* ── Screen navigation ── */
+/* ════════════════════════════════
+   SCREEN NAVIGATION
+   ════════════════════════════════ */
 function showScreen(name) {
-  refs.landingScreen.classList.toggle("hidden", name !== "landing");
+  refs.landingScreen.classList.toggle("hidden",      name !== "landing");
   refs.instructionsScreen.classList.toggle("hidden", name !== "instructions");
-  refs.examScreen.classList.toggle("hidden", name !== "exam");
+  refs.examScreen.classList.toggle("hidden",         name !== "exam");
 }
 
-/* ── Full screen ── */
 function requestFullScreen() {
   const doc = document.documentElement;
   if (!document.fullscreenElement && doc.requestFullscreen) {
@@ -107,28 +113,64 @@ function requestFullScreen() {
   }
 }
 
-/* ── Timer ── */
-function formatTime(secs) {
-  const h = Math.floor(secs / 3600);
-  const m = Math.floor((secs % 3600) / 60);
+/* ════════════════════════════════
+   SECTION TIMERS
+   ════════════════════════════════ */
+function pad(n) { return String(n).padStart(2, "0"); }
+
+function formatSectionTime(secs) {
+  const m = Math.floor(secs / 60);
   const s = secs % 60;
-  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+  return `${pad(m)}:${pad(s)}`;
 }
 
-function pad(n) { return String(n).padStart(2, "0"); }
+function renderTimerDisplay() {
+  const secs = state.sectionTimers[state.currentSection];
+  refs.timerDisplay.textContent = formatSectionTime(secs);
+  refs.timerDisplay.style.color = secs <= 60 ? "#ff0000" : "#cc0000";
+}
 
 function startTimer() {
   clearInterval(state.timerInterval);
-  refs.timerDisplay.textContent = formatTime(state.remainingSeconds);
-  state.timerInterval = setInterval(() => {
-    if (state.submitted) return;
-    state.remainingSeconds = Math.max(0, state.remainingSeconds - 1);
-    refs.timerDisplay.textContent = formatTime(state.remainingSeconds);
-    if (state.remainingSeconds <= 0) autoSubmit();
-  }, 1000);
+  renderTimerDisplay();
+  state.timerInterval = setInterval(tick, 1000);
 }
 
-/* ── Question status ── */
+function tick() {
+  if (state.submitted) return;
+  const si = state.currentSection;
+  if (state.sectionTimers[si] > 0) {
+    state.sectionTimers[si]--;
+    renderTimerDisplay();
+    renderSectionTabs();
+  }
+  if (state.sectionTimers[si] === 0 && !state.expired[si]) {
+    state.expired[si] = true;
+    onSectionExpired(si);
+  }
+}
+
+function onSectionExpired(si) {
+  showToast(`Time up for ${sections[si].name}! Moving to next section…`);
+  const nextSi = si + 1;
+  if (nextSi < sections.length) {
+    goTo(sections[nextSi].ids[0]);
+  } else {
+    setTimeout(() => autoSubmit(), 1800);
+  }
+}
+
+function showToast(msg) {
+  const div = document.createElement("div");
+  div.className = "section-toast";
+  div.textContent = msg;
+  document.body.appendChild(div);
+  setTimeout(() => { div.classList.add("fade-out"); setTimeout(() => div.remove(), 600); }, 2400);
+}
+
+/* ════════════════════════════════
+   QUESTION STATUS
+   ════════════════════════════════ */
 function qStatus(i) {
   if (!state.visited[i]) return "not-visited";
   if (state.marked[i] && state.saved[i]) return "marked-answered";
@@ -137,7 +179,9 @@ function qStatus(i) {
   return "not-answered";
 }
 
-/* ── Navigate to question ── */
+/* ════════════════════════════════
+   NAVIGATION
+   ════════════════════════════════ */
 function goTo(index) {
   const next = Math.max(0, Math.min(questions.length - 1, index));
   if (!state.saved[state.currentQ] && !state.marked[state.currentQ]) {
@@ -148,21 +192,34 @@ function goTo(index) {
   renderAll();
 }
 
-/* ── Section tabs ── */
+/* ════════════════════════════════
+   RENDER: SECTION TABS
+   ════════════════════════════════ */
 function renderSectionTabs() {
   refs.sectionTabs.innerHTML = "";
   sections.forEach((sec, si) => {
     const btn = document.createElement("button");
-    btn.className = "section-tab" + (si === state.currentSection ? " active" : "");
-    btn.innerHTML = `<span>${sec.name}</span>`;
-    btn.addEventListener("click", () => {
-      goTo(sec.ids[0]);
-    });
+    const isActive = si === state.currentSection;
+    const isExpired = state.expired[si];
+    btn.className = `section-tab${isActive ? " active" : ""}${isExpired ? " sec-expired" : ""}`;
+
+    const nameSpan = document.createElement("span");
+    nameSpan.className = "tab-name";
+    nameSpan.textContent = sec.name;
+
+    const timeSpan = document.createElement("span");
+    timeSpan.className = `tab-time${isExpired ? " expired" : ""}`;
+    timeSpan.textContent = isExpired ? "00:00" : formatSectionTime(state.sectionTimers[si]);
+
+    btn.append(nameSpan, timeSpan);
+    btn.addEventListener("click", () => goTo(sec.ids[0]));
     refs.sectionTabs.appendChild(btn);
   });
 }
 
-/* ── Question render ── */
+/* ════════════════════════════════
+   RENDER: QUESTION
+   ════════════════════════════════ */
 function renderQuestion() {
   const q = questions[state.currentQ];
   refs.questionNo.textContent = String(state.currentQ + 1);
@@ -195,13 +252,15 @@ function renderQuestion() {
   });
 }
 
-/* ── Palette render ── */
+/* ════════════════════════════════
+   RENDER: PALETTE
+   ════════════════════════════════ */
 function renderPalette() {
   const sec = sections[state.currentSection];
-  refs.paletteSectionTitle.textContent = sec.name;
+  refs.paletteSectionTitle.textContent = sec.fullName;
   refs.palette.innerHTML = "";
 
-  sec.ids.forEach((qi) => {
+  sec.ids.forEach(qi => {
     const btn = document.createElement("button");
     const status = qStatus(qi);
     btn.className = `palette-btn ${status}${qi === state.currentQ ? " current" : ""}`;
@@ -211,33 +270,38 @@ function renderPalette() {
   });
 }
 
-/* ── Status counts ── */
+/* ════════════════════════════════
+   RENDER: COUNTS
+   ════════════════════════════════ */
 function renderCounts() {
   let answered = 0, notAnswered = 0, notVisited = 0, marked = 0, markedAnswered = 0;
   questions.forEach((_, i) => {
     const s = qStatus(i);
-    if (s === "answered")        answered++;
-    else if (s === "not-answered") notAnswered++;
-    else if (s === "not-visited")  notVisited++;
-    else if (s === "marked")       marked++;
+    if (s === "answered")           answered++;
+    else if (s === "not-answered")  notAnswered++;
+    else if (s === "not-visited")   notVisited++;
+    else if (s === "marked")        marked++;
     else if (s === "marked-answered") markedAnswered++;
   });
-  refs.answeredCount.textContent        = answered;
-  refs.notAnsweredCount.textContent     = notAnswered;
-  refs.notVisitedCount.textContent      = notVisited;
-  refs.markedCount.textContent          = marked;
-  refs.markedAnsweredCount.textContent  = markedAnswered;
+  refs.answeredCount.textContent       = answered;
+  refs.notAnsweredCount.textContent    = notAnswered;
+  refs.notVisitedCount.textContent     = notVisited;
+  refs.markedCount.textContent         = marked;
+  refs.markedAnsweredCount.textContent = markedAnswered;
 }
 
-/* ── Render all ── */
 function renderAll() {
   renderSectionTabs();
   renderQuestion();
   renderPalette();
   renderCounts();
+  renderTimerDisplay();
+  if (state.qpOpen) renderQPContent();
 }
 
-/* ── Save & Next / Mark for Review ── */
+/* ════════════════════════════════
+   SAVE / MARK / CLEAR
+   ════════════════════════════════ */
 function saveCurrent(markForReview) {
   state.visited[state.currentQ] = true;
   if (state.answers[state.currentQ] !== null) {
@@ -246,10 +310,10 @@ function saveCurrent(markForReview) {
   state.marked[state.currentQ] = markForReview;
 
   const sec = sections[state.currentSection];
-  const posInSection = sec.ids.indexOf(state.currentQ);
+  const pos = sec.ids.indexOf(state.currentQ);
 
-  if (posInSection < sec.ids.length - 1) {
-    goTo(sec.ids[posInSection + 1]);
+  if (pos < sec.ids.length - 1) {
+    goTo(sec.ids[pos + 1]);
   } else if (state.currentSection < sections.length - 1) {
     goTo(sections[state.currentSection + 1].ids[0]);
   } else {
@@ -257,7 +321,6 @@ function saveCurrent(markForReview) {
   }
 }
 
-/* ── Clear response ── */
 function clearCurrent() {
   state.answers[state.currentQ] = null;
   state.saved[state.currentQ] = false;
@@ -266,69 +329,124 @@ function clearCurrent() {
   renderCounts();
 }
 
-/* ── Build summary table ── */
+/* ════════════════════════════════
+   QUESTION PAPER PANEL
+   ════════════════════════════════ */
+function openQP() {
+  state.qpOpen = true;
+  refs.qpOverlay.classList.remove("hidden");
+  renderQPContent();
+}
+
+function closeQP() {
+  state.qpOpen = false;
+  refs.qpOverlay.classList.add("hidden");
+}
+
+function renderQPContent() {
+  refs.qpContent.innerHTML = "";
+  sections.forEach((sec, si) => {
+    const secDiv = document.createElement("div");
+    secDiv.className = "qp-section";
+
+    const titleDiv = document.createElement("div");
+    titleDiv.className = "qp-section-title";
+    const timeSpan = document.createElement("span");
+    timeSpan.className = "qp-section-timer";
+    timeSpan.textContent = state.expired[si] ? "Expired" : formatSectionTime(state.sectionTimers[si]);
+    titleDiv.textContent = sec.fullName + " ";
+    titleDiv.appendChild(timeSpan);
+    secDiv.appendChild(titleDiv);
+
+    sec.ids.forEach(qi => {
+      const row = document.createElement("div");
+      const status = qStatus(qi);
+      row.className = `qp-q-row${qi === state.currentQ ? " qp-current" : ""}`;
+
+      const numSpan = document.createElement("span");
+      numSpan.className = "qp-num";
+      numSpan.textContent = `Q${qi + 1}.`;
+
+      const dot = document.createElement("span");
+      dot.className = `qp-dot ${status === "not-visited" ? "" : status}`;
+
+      const txt = document.createElement("span");
+      txt.className = "qp-q-text";
+      txt.textContent = questions[qi].text.length > 90
+        ? questions[qi].text.slice(0, 90) + "…"
+        : questions[qi].text;
+
+      row.append(numSpan, dot, txt);
+      row.addEventListener("click", () => {
+        closeQP();
+        goTo(qi);
+      });
+      secDiv.appendChild(row);
+    });
+
+    refs.qpContent.appendChild(secDiv);
+  });
+}
+
+/* ════════════════════════════════
+   SUBMIT FLOW
+   ════════════════════════════════ */
 function buildSummary() {
   refs.summaryBody.innerHTML = "";
   refs.summaryFoot.innerHTML = "";
+  let tT = 0, tA = 0, tNA = 0, tM = 0, tMA = 0, tNV = 0;
 
-  let totTotal = 0, totAns = 0, totNotAns = 0, totMark = 0, totMarkAns = 0, totNotVis = 0;
-
-  sections.forEach((sec) => {
+  sections.forEach(sec => {
     let ans = 0, notAns = 0, mark = 0, markAns = 0, notVis = 0;
-    sec.ids.forEach((qi) => {
+    sec.ids.forEach(qi => {
       const s = qStatus(qi);
-      if (s === "answered")          ans++;
-      else if (s === "not-answered") notAns++;
-      else if (s === "marked")       mark++;
+      if (s === "answered")           ans++;
+      else if (s === "not-answered")  notAns++;
+      else if (s === "marked")        mark++;
       else if (s === "marked-answered") markAns++;
-      else                           notVis++;
+      else                            notVis++;
     });
     const total = sec.ids.length;
-    totTotal += total; totAns += ans; totNotAns += notAns;
-    totMark += mark; totMarkAns += markAns; totNotVis += notVis;
+    tT += total; tA += ans; tNA += notAns; tM += mark; tMA += markAns; tNV += notVis;
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${sec.name}</td>
+      <td>${sec.fullName}</td>
       <td>${total}</td>
       <td class="col-green">${ans}</td>
       <td class="col-red">${notAns}</td>
       <td class="col-purple">${mark}</td>
       <td class="col-purple">${markAns}</td>
-      <td class="col-grey">${notVis}</td>
-    `;
+      <td class="col-grey">${notVis}</td>`;
     refs.summaryBody.appendChild(tr);
   });
 
   refs.summaryFoot.innerHTML = `
     <tr>
       <td>Total</td>
-      <td>${totTotal}</td>
-      <td class="col-green">${totAns}</td>
-      <td class="col-red">${totNotAns}</td>
-      <td class="col-purple">${totMark}</td>
-      <td class="col-purple">${totMarkAns}</td>
-      <td class="col-grey">${totNotVis}</td>
-    </tr>
-  `;
+      <td>${tT}</td>
+      <td class="col-green">${tA}</td>
+      <td class="col-red">${tNA}</td>
+      <td class="col-purple">${tM}</td>
+      <td class="col-purple">${tMA}</td>
+      <td class="col-grey">${tNV}</td>
+    </tr>`;
 }
 
-/* ── Show submit modal ── */
 function showSubmitModal() {
   buildSummary();
   refs.submitModal.classList.remove("hidden");
 }
 
-/* ── Auto-submit on time up ── */
 function autoSubmit() {
   if (state.submitted) return;
   state.submitted = true;
   clearInterval(state.timerInterval);
   refs.submitModal.classList.add("hidden");
+  refs.qpOverlay.classList.add("hidden");
   refs.resultModal.classList.remove("hidden");
 }
 
-/* ── Confirm submit ── */
 function confirmSubmit() {
   if (state.submitted) return;
   state.submitted = true;
@@ -337,7 +455,9 @@ function confirmSubmit() {
   refs.resultModal.classList.remove("hidden");
 }
 
-/* ── Events ── */
+/* ════════════════════════════════
+   EVENT BINDINGS
+   ════════════════════════════════ */
 function bindEvents() {
   // Landing → Instructions
   refs.startTestBtn.addEventListener("click", () => {
@@ -345,24 +465,15 @@ function bindEvents() {
     showScreen("instructions");
   });
 
-  // Instructions → Landing (back)
   refs.backToLanding.addEventListener("click", () => showScreen("landing"));
 
-  // Enable begin button only when both language and checkbox are set
-  const checkBegin = () => {
-    refs.beginBtn.disabled = !(refs.agreeCheck.checked && refs.languageSelect.value);
-  };
-  refs.agreeCheck.addEventListener("change", checkBegin);
-  refs.languageSelect.addEventListener("change", (e) => {
-    state.language = e.target.value;
-    checkBegin();
+  // Enable begin when checkbox checked
+  refs.agreeCheck.addEventListener("change", () => {
+    refs.beginBtn.disabled = !refs.agreeCheck.checked;
   });
 
-  // Begin test
+  // Begin exam
   refs.beginBtn.addEventListener("click", () => {
-    if (refs.questionLang) {
-      refs.questionLang.value = state.language;
-    }
     requestFullScreen();
     showScreen("exam");
     goTo(0);
@@ -385,23 +496,42 @@ function bindEvents() {
   });
 
   refs.submitBtn.addEventListener("click", showSubmitModal);
-
-  // Submit modal
   refs.cancelSubmit.addEventListener("click", () => refs.submitModal.classList.add("hidden"));
   refs.confirmSubmit.addEventListener("click", confirmSubmit);
-
-  // Result close
   refs.closeResult.addEventListener("click", () => refs.resultModal.classList.add("hidden"));
 
-  // Prevent accidental navigation out during exam
-  window.addEventListener("beforeunload", (e) => {
-    if (!state.submitted && refs.examScreen && !refs.examScreen.classList.contains("hidden")) {
+  // Question Paper panel
+  refs.qpToggleBtn.addEventListener("click", () => state.qpOpen ? closeQP() : openQP());
+  refs.closeQP.addEventListener("click", closeQP);
+  refs.qpOverlay.addEventListener("click", e => { if (e.target === refs.qpOverlay) closeQP(); });
+
+  // Keyboard shortcuts
+  document.addEventListener("keydown", e => {
+    const tag = document.activeElement.tagName;
+    const inInput = tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA";
+    if (inInput) return;
+
+    if (e.key === "ArrowRight" || e.key === "q" || e.key === "Q") {
+      if (!refs.examScreen.classList.contains("hidden")) {
+        state.qpOpen ? closeQP() : openQP();
+      }
+    }
+    if (e.key === "Escape" || e.key === "ArrowLeft") {
+      if (state.qpOpen) closeQP();
+    }
+  });
+
+  // Warn on accidental navigation
+  window.addEventListener("beforeunload", e => {
+    if (!state.submitted && !refs.examScreen.classList.contains("hidden")) {
       e.preventDefault();
       e.returnValue = "";
     }
   });
 }
 
-/* ── Init ── */
+/* ════════════════════════════════
+   INIT
+   ════════════════════════════════ */
 bindEvents();
 showScreen("landing");

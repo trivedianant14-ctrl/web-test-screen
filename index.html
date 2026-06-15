@@ -233,20 +233,6 @@
         </div>
 
         <div class="instr-footer-controls">
-          <div class="lang-row">
-            <label class="lang-label">
-              Choose your default language:&nbsp;
-              <select id="languageSelect">
-                <option value="">— Select —</option>
-                <option value="English">English</option>
-                <option value="Hindi">Hindi</option>
-              </select>
-            </label>
-            <span class="lang-note red-note">
-              Please note all questions will appear in your default language.
-              This language can be changed for a particular question later on.
-            </span>
-          </div>
           <div class="declaration-row">
             <label class="check-label">
               <input id="agreeCheck" type="checkbox" />
@@ -269,13 +255,9 @@
         <!-- Title bar -->
         <div class="norcet-titlebar">
           <strong>AIIMS NORCET — Nursing Officer Recruitment Common Eligibility Test (Stage I)</strong>
-          <label class="lang-switch">
-            View In:&nbsp;
-            <select id="questionLang">
-              <option value="English">English</option>
-              <option value="Hindi">Hindi</option>
-            </select>
-          </label>
+          <button id="qpToggleBtn" class="qp-toggle-btn" title="Open Question Paper (→ key)">
+            &#9776; Question Paper &nbsp;&#9656;
+          </button>
         </div>
 
         <!-- Candidate strip -->
@@ -287,8 +269,8 @@
           </div>
           <div class="exam-meta-right">
             <div>
-              <strong>Total Time Remaining:</strong>
-              <span id="timerDisplay" class="timer-red">01:30:00</span>
+              <strong>Section Time Remaining:</strong>
+              <span id="timerDisplay" class="timer-red">20:00</span>
             </div>
             <div><strong>Exam Date:</strong> 13-Jun-2026</div>
           </div>
@@ -379,6 +361,18 @@
           <button id="cancelSubmit" class="btn-secondary">No, Continue Test</button>
           <button id="confirmSubmit" class="btn-submit-confirm">Yes, Submit Test</button>
         </div>
+      </div>
+    </div>
+
+    <!-- ── QUESTION PAPER PANEL ── -->
+    <div id="qpOverlay" class="qp-overlay hidden" role="dialog" aria-modal="true" aria-label="Question Paper">
+      <div class="qp-panel">
+        <div class="qp-panel-header">
+          <span class="qp-panel-title">&#9776; Question Paper</span>
+          <span class="qp-panel-hint">Press&nbsp;<kbd>Esc</kbd>&nbsp;or&nbsp;<kbd>&#8592;</kbd>&nbsp;to close</span>
+          <button id="closeQP" class="qp-close-btn" aria-label="Close">&times;</button>
+        </div>
+        <div id="qpContent" class="qp-content"></div>
       </div>
     </div>
 
